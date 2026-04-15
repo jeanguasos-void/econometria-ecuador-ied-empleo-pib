@@ -1,0 +1,131 @@
+# ANALISIS DE IED, PIB Y EMPLEO INDUSTRIAL EN ECUADOR
+# MODELO: VAR BAYESIANO
+
+#1 LIMPIEZA DEL ENTORNO
+rm(list = ls())
+cat("\014"); graphics.off()
+
+# CARGA DE PAQUETES-LIBRERIAS
+library(BVAR)
+library(urca)
+library(vars)
+library(tseries)
+library(ggplot2)
+library(readxl)
+
+#2 CARGAR LA BASE
+datos <- read_excel("datos.xlsx", sheet = "data ajustada")
+names(datos)
+
+#3 test adf (estacionariedad)
+#Hipótesis del ADF Test
+#Hipótesis nula (H₀) :La serie de tiempo tiene una raíz unitaria, es decir, NO es estacionaria.
+#Hipótesis alternativa (H₁) :La serie NO tiene raíz unitaria, es decir, ES estacionaria.
+#"Si p-valor ≥ 0.05 ⇒ No se rechaza H₀ 
+#Si p-valor < 0.05 ⇒ Se rechaza H₀"
+
+adf.test(datos$ied_pct_pib)
+adf.test(datos$empleo_industria)
+adf.test(datos$crecimiento_pib)
+
+#primera diferencia
+adf.test(diff(datos$ied_pct_pib))
+adf.test(diff(datos$empleo_industria))
+adf.test(diff(datos$crecimiento_pib))
+
+#doble diferencia
+adf.test(diff(diff(datos$ied_pct_pib)))
+adf.test(diff(diff(datos$empleo_industria)))
+ur.df(diff(diff(datos$empleo_industria)), type = "drift", selectlags = "AIC")
+adf.test(diff(diff(datos$crecimiento_pib)))
+
+#4 Crear base con variables estacionarias (doble diferencia)
+data_var <- data.frame(
+  dd_ied     = diff(diff(datos$ied_pct_pib)),
+  dd_empleo  = diff(diff(datos$empleo_industria)),
+  dd_pib     = diff(diff(datos$crecimiento_pib))
+)
+
+#5 Eliminar NA iniciales (causados por las diferencias)
+data_var <- na.omit(data_var)
+
+#6 Seleccionar número óptimo de rezagos (periodo anteriores)
+lagselect <- VARselect(data_var, type = "const")
+print(lagselect$selection)
+
+#7 Estimar el modelo VAR con el número de rezagos 4 por ajuste
+modelo_var <- VAR(data_var, p = 4, type = "const")
+
+# Revisar resumen del modelo
+summary(modelo_var)
+
+######################################
+#7 Estimar el modelo BVAR con 2 rezagos
+#modelo_bvar <- bvar(data = data_var, lags = 2)
+
+set.seed(12345)
+modelo_bvar <- bvar(data = data_var, lags = 2)
+saveRDS(modelo_bvar, file = "modelo_bvar.rds")
+
+# luego cargas siempre el mismo modelo para análisis idéntico:
+modelo_bvar <- readRDS("modelo_bvar.rds")
+
+# Resumen del modelo
+summary(modelo_bvar)
+
+#8 Funciones de impulso-respuesta
+irf_bvar <- irf(modelo_bvar, horizon = 10)
+plot(irf_bvar)
+
+#pruebas de estabilidad
+# 9. Estabilidad del sistema (raíces del polinomio < 1)
+# Para comprobar que el sistema es estable, se estima un VAR clásico con igual número de rezagos
+modelo_var_check <- VAR(data_var, p = 2, type = "const")
+roots(modelo_var_check, modulus = TRUE)  # Todas deben ser < 1
+
+#BORRAR
+# 9. Estabilidad del sistema (raíces del polinomio < 1)
+# Para comprobar que el sistema es estable, se estima un VAR clásico con igual número de rezagos
+modelo_var_check <- VAR(data_var, p = 2, type = "const")
+
+# Calcula las raíces del polinomio
+# La función roots() devuelve un objeto con las raíces complejas
+raices_complejas <- roots(modelo_var_check)
+
+# Extrae las partes real e imaginaria de las raíces
+df_raices <- data.frame(
+  real = Re(raices_complejas),
+  imaginaria = Im(raices_complejas)
+)
+
+# Calcula el círculo unitario para el plot
+theta <- seq(0, 2*pi, length.out = 100)
+circulo_unitario <- data.frame(
+  x = cos(theta),
+  y = sin(theta)
+)
+
+# Grafica las raíces y el círculo unitario con ggplot2
+ggplot() +
+  geom_path(data = circulo_unitario, aes(x, y), color = "blue", linetype = "dashed") + # Dibuja el círculo
+  geom_point(data = df_raices, aes(x = real, y = imaginaria), color = "red", size = 3) + # Dibuja las raíces
+  geom_hline(yintercept = 0, linetype = "dotted", color = "gray") + # Eje X
+  geom_vline(xintercept = 0, linetype = "dotted", color = "gray") + # Eje Y
+  coord_fixed() + # Mantiene la proporción para que el círculo se vea redondo
+  labs(title = "Raíces del Polinomio Autorregresivo",
+       subtitle = "El modelo es estable si todas las raíces están dentro del círculo unitario",
+       x = "Parte Real",
+       y = "Parte Imaginaria") +
+  theme_minimal() +
+  xlim(-1.2, 1.2) + # Ajusta los límites del eje X
+  ylim(-1.2, 1.2)   # Ajusta los límites del eje Y
+
+# 10. Convergencia del muestreo MCMC del modelo bayesiano
+plot(modelo_bvar)  # Muestra trazas y densidades de lambda y log-verosimilitud
+
+# 11. Evaluación del hiperparámetro lambda (nivel de regularización)
+lambda_val <- summary(modelo_bvar)$hyperparameters$lambda
+cat("Valor óptimo de lambda estimado:", "0.64162")
+
+# 12. Matriz de correlaciones de las variables (diagnóstico de multicolinealidad)
+cor(data_var)
