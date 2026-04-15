@@ -83,7 +83,6 @@ plot(irf_bvar)
 modelo_var_check <- VAR(data_var, p = 2, type = "const")
 roots(modelo_var_check, modulus = TRUE)  # Todas deben ser < 1
 
-#BORRAR
 # 9. Estabilidad del sistema (raíces del polinomio < 1)
 # Para comprobar que el sistema es estable, se estima un VAR clásico con igual número de rezagos
 modelo_var_check <- VAR(data_var, p = 2, type = "const")
