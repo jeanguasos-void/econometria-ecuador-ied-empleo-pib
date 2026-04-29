@@ -26,5 +26,16 @@ Estructura del proyecto
 •	/scripts → código en R
 •	/outputs → resultados y gráficos
 
+Resultados
+
+Convergencia MCMC
+![MCMC](outputs/mcmc.png)
+
+Raíces del modelo
+![Raices](outputs/raices.png)
+
+Shock IED → Empleo y PIB
+![Shock](outputs/shock.png)
+
 Autor
 Econ. Jean Pierre Soledispa Sacon
