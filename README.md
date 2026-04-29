@@ -30,16 +30,26 @@ Resultados
 
 Convergencia MCMC
 El modelo muestra una adecuada convergencia de las cadenas MCMC, indicando estabilidad en la estimación bayesiana.
+
 ![MCMC](outputs/MCMC.png)
 
 Raíces del modelo
 Todas las raíces se encuentran dentro del círculo unitario, lo que confirma la estabilidad del modelo VAR.
+
 ![Raices](outputs/Raices.png)
 
 Shock IED → Empleo y PIB
 Se observa el impacto dinámico de la inversión extranjera directa sobre el empleo y la actividad económica.
+
 ![Shock](outputs/Shock.png)
 
+Conclusiones
+* La IED presenta efectos dinámicos sobre el empleo en el corto plazo.
+* Se evidencia relación entre actividad económica y variaciones en la inversión.
+* El modelo muestra estabilidad, lo que valida su uso para análisis económico.
+
+Valor del proyecto
+Este análisis permite comprender la relación entre inversión y empleo en Ecuador, aportando evidencia para decisiones económicas y políticas públicas.
 
 
 
