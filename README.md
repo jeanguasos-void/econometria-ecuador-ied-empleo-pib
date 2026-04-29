@@ -29,6 +29,7 @@ Estructura del proyecto
 Resultados
 
 Convergencia MCMC
+El modelo muestra una adecuada convergencia de las cadenas MCMC, indicando estabilidad en la estimación bayesiana.
 ![MCMC](outputs/mcmc.png)
 
 
@@ -36,6 +37,7 @@ Convergencia MCMC
 
 
 Raíces del modelo
+Todas las raíces se encuentran dentro del círculo unitario, lo que confirma la estabilidad del modelo VAR.
 ![Raices](outputs/raices.png)
 
 
@@ -43,6 +45,7 @@ Raíces del modelo
 
 
 Shock IED → Empleo y PIB
+Se observa el impacto dinámico de la inversión extranjera directa sobre el empleo y la actividad económica.
 ![Shock](outputs/shock.png)
 
 
