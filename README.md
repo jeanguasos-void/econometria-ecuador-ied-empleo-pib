@@ -34,11 +34,11 @@ El modelo muestra una adecuada convergencia de las cadenas MCMC, indicando estab
 
 Raíces del modelo
 Todas las raíces se encuentran dentro del círculo unitario, lo que confirma la estabilidad del modelo VAR.
-![Raices](outputs/raices.png)
+![Raices](outputs/Raices.png)
 
 Shock IED → Empleo y PIB
 Se observa el impacto dinámico de la inversión extranjera directa sobre el empleo y la actividad económica.
-![Shock](outputs/shock.png)
+![Shock](outputs/Shock.png)
 
 
 
