@@ -1,2 +1,1 @@
-# codigos
-codigos de r o python para cualquier proyecto
+econometria-ecuador-ied-empleo-pib
