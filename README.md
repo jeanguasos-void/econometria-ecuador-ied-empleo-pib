@@ -1,4 +1,4 @@
-Análisis econométrico: IED, PIB y empleo industrial en Ecuador
+Análisis econométrico: IED, PIB y empleo industrial en Ecuador by Econ. Jean Pierre Soledispa Sacon
 
 Descripción: Este proyecto analiza la relación entre la Inversión Extranjera Directa (IED), el Producto Interno Bruto (PIB) y el empleo en Ecuador, utilizando modelos de series temporales.
 
@@ -31,11 +31,23 @@ Resultados
 Convergencia MCMC
 ![MCMC](outputs/mcmc.png)
 
+
+
+
+
 Raíces del modelo
 ![Raices](outputs/raices.png)
+
+
+
+
 
 Shock IED → Empleo y PIB
 ![Shock](outputs/shock.png)
 
-Autor
-Econ. Jean Pierre Soledispa Sacon
+
+
+
+
+
+
