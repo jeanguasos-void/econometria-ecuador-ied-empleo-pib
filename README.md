@@ -30,7 +30,7 @@ Resultados
 
 Convergencia MCMC
 El modelo muestra una adecuada convergencia de las cadenas MCMC, indicando estabilidad en la estimación bayesiana.
-![MCMC](outputs/mcmc.png)
+![MCMC](outputs/MCMC.png)
 
 Raíces del modelo
 Todas las raíces se encuentran dentro del círculo unitario, lo que confirma la estabilidad del modelo VAR.
